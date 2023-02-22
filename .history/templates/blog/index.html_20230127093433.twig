@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Blog astuces tech {% endblock %}
+ {% block slider %} 
+ <div class="slider">
+    <div class="slider-content">
+ <h1>Bienvenue sur Blog astuces tech</h1>
+ <h2>Un blog</h2>
+ <button class="btn">consulter</button>
+ <h3 target="_blank" href="https://developpement-solution.fr/">Développement-Solution</h3>
+ <!--<a target="_blank" href="https://abcquiz.fr">-->
+ 
+           </a>
+ </div>
+        </div> {% endblock %} 
+{% block body %}
+    <div class="articles-infos">
+    <strong>{{articles | length}}</strong> articles retrouvés</div>
+    <div class="articles">
+        {% for article in articles %}
+            <a href="article/{{article.slug}}" class="article-item">
+                <div class="article-image">
+                    <img src={{ article.imageUrl }}  alt="Image de l'aricle : {{ article.title }}">
+                </div>
+                <div class="article-details flex">
+                    <div class="article-author-details">
+                        <div class="article-author-picture">
+                            {% if article.author.profile.picture is defined %}
+                                <img src={{ article.author.profile.picture }}  alt="image de profile de {{article.author.fullname}}">
+                            {% else %}
+                                <img src="/_assets/images/avatar_jstore.webp"  alt="image de profile de {{article.author.fullname}}">
+                            {% endif %}
+                              </div>
+                    </div>
+                    <div class="article-content-details">
+                        <h2 class="article-title"> {{ article.title }} </h2>
+                        <div class="article-createdAt"> {{ article.fromNow }} </div>
+                    </div>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+{% endblock %}

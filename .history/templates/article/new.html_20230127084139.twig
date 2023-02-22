@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvel Article{% endblock %}
+{% set aside = "not" %}
+{% block header %}
+{{ include ("header/header.html.twig", {name: "Créé un article" }) }}
+{% endblock %}
+{% block body %}
+
+  <div class="UserDashboard flex gap-20">
+    {{ include ("account_dashboard/index.html.twig", {page: "articles"}) }}
+  <div class="UserDashboard-container">
+  {{ include('article/_form.html.twig', {title: "Créer un nouvel Article"}) }}
+  </div>
+  </div>
+  
+
+  
+
+    <a href="{{ path('app_article_index') }}" class="btn">Retour</a>
+{% endblock %}
+
+ {% block javascripts %}
+   <script>
+     $(document).ready(function() {
+        $('.choices_categories').select2();
+        $("input[type='file']").change(function() {
+        var file = $(this).get(0).files[0];
+        if(file){
+                var reader = new FileReader();
+                reader.onload = function(){
+                        var img = `<img src='${reader.result}' alt="Preview Image">`
+                        $(".image-preview").html(img)
+                }
+                 reader.readAsDataURL(file);
+        }
+    })
+    $("textarea").removeAttr('required');
+});
+ClassicEditor
+          .create( document.querySelector( '#article_content' ) )
+          .then( editor => {
+                  console.log( editor );
+          } )
+          .catch( error => {
+                  console.error( error );
+          } );
+          </script>
+    {% endblock %}

@@ -1,0 +1,90 @@
+<?php
+
+namespace App\Form;
+
+use App\Entity\Article;
+use App\Entity\Category;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
+class ArticleType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('title', TextType::class, [
+                'label' => false,
+                'attr' => [
+                    'placeholder' => 'Titre de l\'article ...',
+                    'class' => 'flex-1'
+                ],
+                'row_attr' =>[
+                    'class' => 'form-group flex'
+                ]
+            ])
+            ->add('content', TextareaType::class, [
+                'label' => false,
+                'required' => true,
+                'attr' => [
+                    'placeholder' => 'Article content ...',
+                    'class' => 'flex-1',
+                    'rows' => 15,
+                ], 
+                'row_attr' =>[
+                    'class' => 'form-group flex'
+                ],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Merci de rentrer un article pour le blog (ce champ ne peut pas être vide) ...',
+                    ]),
+                    new Length([
+                        'min' => 150,
+                        'minMessage' => 'Votre article doit contenir au moins {{ limit }} characters',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 4096,
+                    ]),
+                ],
+            ])
+            ->add('imageFile', FileType::class, [
+                'label' => false,
+                'required' => false,
+                'attr' => [
+                   // 'placeholder' => 'Article title',
+                   'class' => 'flex-1'
+                ],
+                'row_attr' =>[
+                    'class' => 'form-group flex'
+                ]
+            ])
+            ->add('categories', EntityType::class, [
+                'label' =>false,
+                'class' => Category::class, 
+                'choice_label' => 'name',
+                'multiple' => true,
+                'by_reference' => false,
+                'attr' => [
+                    // 'placeholder' => 'Article title',
+                    'class' => 'flex-1 choices_categories'
+                 ],
+                 'row_attr' =>[
+                     'class' => 'form-group flex'
+                 ]
+            ])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => Article::class,
+        ]);
+    }
+}

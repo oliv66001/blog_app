@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article index{% endblock %}
+{% set aside = "not" %}
+
+{% block header %}
+{{ include ("header/header.html.twig", {name: "Mes articles" }) }}
+{% endblock %}
+{% block body %}
+ <div class="UserDashboard flex gap-20">
+    {{ include ('account_dashboard/index.html.twig', {page: "articles"}) }}
+  <div class="UserDashboard-container">
+<div class="flex mb-10">
+ <a class="btn" href="{{ path('app_article_new') }}">Création d'un nouvel article</a>
+ </div>
+ <div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Contenu</th>
+                <th>ImageUrl</th>
+                <th>Date de création</th>
+                <th>Choix</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for article in articles %}
+            <tr>
+                <td>{{ article.id }}</td>
+                <td>{{ article.title }}</td>
+               {# <td>{{ article.slug }}</td> #}
+                <td class="td-content">
+                <div class="article-content">
+                {{ article.content | raw }}
+                </div>
+                </td>
+                <td><img src="{{ article.imageUrl }}" alt="Image de {{ article.title }}"></td>
+                <td>{{ article.createdAt ? article.fromNow : '' }}</td>
+                  <td>
+                  <div class="flex">
+                   <a class="btn" href="{{ path('app_article_show', {'id': article.id}) }}">Voir</a>
+                    <a class="btn" href="{{ path('app_article_edit', {'id': article.id}) }}">Modifier</a>
+                     {{ include('article/_delete_form.html.twig') }}
+             
+                  </div>
+                      </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+  </div>
+  </div>
+ 
+
+   
+{% endblock %}
+
+ {% block javascripts %}
+   <script>
+   $('.article-content').readmore({
+  speed: 75,
+  moreLink: '<a href="#" class="btn btn-read">Lire la suite</a>',
+  lessLink: '<a href="#" class="btn btn-read">Lire moins</a>'
+});
+   </script>
+    {% endblock %}

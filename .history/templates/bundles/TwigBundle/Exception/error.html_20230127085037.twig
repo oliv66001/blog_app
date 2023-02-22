@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur | Blog astuces tech{% endblock %}
+{% set aside = "not" %}
+{% block header %}
+{{ include ("header/header.html.twig", {name: "Erreur"}) }}
+{% endblock %}
+
+
+{% block body %}
+<div class="error-page">
+<h2>
+Erreur
+</h2>
+<p>Page introuvable !</p>
+</div>
+{% endblock %}
